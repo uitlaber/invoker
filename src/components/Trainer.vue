@@ -1,16 +1,5 @@
 <template>
   <div class="trainer">
-    <div
-      class="point"
-      v-if="point > 0 && !started"
-      v-text="
-        'Вы заработали ' +
-          point +
-          ' очко за 30 сек. Совершили ' +
-          mistakes +
-          ' ошибок!'
-      "
-    ></div>
     <div class="casts" v-if="started">
       <div class="casts__item" v-for="cast in casts">
         <img
@@ -31,16 +20,18 @@
         <p v-text="spell.name"></p>
       </div>
     </div>
-
+    <div class="time"><span :style="{ width: time + '%' }"></span></div>
     <div class="buttons">
       <div class="buttons__item" v-for="sphere in spheres">
-        <img :src="sphere.icon" />
+        <img :src="sphere.icon" /> <span v-text="sphere.button"></span>
       </div>
       <div class="buttons__item">
         <img :src="ready_spells[0].icon" alt="" v-if="ready_spells[0]" />
+        <span>D</span>
       </div>
       <div class="buttons__item">
         <img :src="ready_spells[1].icon" alt="" v-if="ready_spells[1]" />
+        <span>F</span>
       </div>
 
       <div class="buttons__item">
@@ -48,14 +39,26 @@
           src="https://www.invokergame.com/images/spells/invoke.png"
           alt=""
         />
+        <span>R</span>
       </div>
     </div>
     <div class="random_spell" v-if="started">
       <img :src="random_spell.icon" alt="" v-if="random_spell" />
     </div>
     <button class="button-start" @click="startGame();" v-if="!started">
-      Старт
+      Старт (Нажмите ENTER)
     </button>
+    <div
+      class="point"
+      v-if="point > 0 && !started"
+      v-text="
+        'Вы заработали ' +
+          point +
+          ' очко за 30 сек. Совершили ' +
+          mistakes +
+          ' ошибок!'
+      "
+    ></div>
   </div>
 </template>
 
@@ -79,12 +82,9 @@ export default {
           self.casts.push(event.keyCode);
         }
       } else if (event.keyCode == 82) {
-        var audio = new Audio(
-          "https://d1u5p3l4wpay3k.cloudfront.net/dota2_gamepedia/c/c7/Invoke.mp3"
-        ); // path to file
-
-        audio.play();
         self.invoke();
+      } else if (event.keyCode == 13) {
+        self.startGame();
       }
     });
   },
@@ -100,6 +100,12 @@ export default {
           this.loadRandom();
         } else {
           this.mistakes++;
+          var audio = new Audio(
+            this.mistakeAudios[
+              Math.floor((Math.random() * this.mistakeAudios.length) | 0)
+            ]
+          );
+          audio.play();
         }
       } else {
         if (this.ready_spells[0] != spell) {
@@ -110,13 +116,26 @@ export default {
             this.loadRandom();
           } else {
             this.mistakes++;
+            var audio = new Audio(
+              this.mistakeAudios[
+                Math.floor((Math.random() * this.mistakeAudios.length) | 0)
+              ]
+            );
+            audio.play();
           }
         }
       }
+
+      var audio = new Audio(
+        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_gamepedia/c/c7/Invoke.mp3"
+      ); // path to file
+      audio.play();
     },
     invokeSpell() {
       var self = this;
-      return self.spells.find(x => x.keys === self.casts.join());
+      var sorted = self.casts.sort();
+      console.log(sorted);
+      return self.spells.find(x => x.keys === sorted.join());
     },
     startGame() {
       var self = this;
@@ -125,6 +144,9 @@ export default {
       setTimeout(function() {
         self.started = false;
       }, 30 * 1000);
+      setInterval(function() {
+        self.time = self.time - 0.3;
+      }, 1000);
     },
     loadRandom() {
       var self = this;
@@ -148,6 +170,13 @@ export default {
   },
   data() {
     return {
+      time: 100,
+      mistakeAudios: [
+        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/8/8c/Invo_failure_03_ru.mp3",
+        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/f/fd/Invo_failure_06_ru.mp3",
+        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/f/f2/Invo_failure_05_ru.mp3",
+        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/a/a2/Invo_failure_10_ru.mp3"
+      ],
       started: false,
       point: 0,
       mistakes: 0,
@@ -187,7 +216,7 @@ export default {
         },
         {
           name: "Ice Wall",
-          keys: "81,81,69",
+          keys: "69,81,81",
           icon: "https://www.invokergame.com/images/spells/ice_wall.png"
         },
         {
@@ -197,12 +226,12 @@ export default {
         },
         {
           name: "Tornado",
-          keys: "87,87,81",
+          keys: "81,87,87",
           icon: "https://www.invokergame.com/images/spells/tornado.png"
         },
         {
           name: "Alacrity",
-          keys: "87,87,69",
+          keys: "69,87,87",
           icon: "https://www.invokergame.com/images/spells/alacrity.png"
         },
         {
@@ -222,7 +251,7 @@ export default {
         },
         {
           name: "Deafening Blast",
-          keys: "81,87,69",
+          keys: "69,81,87",
           icon: "https://www.invokergame.com/images/spells/deafening_blast.png"
         }
       ]
@@ -271,6 +300,16 @@ export default {
   background: #000;
   width: 60px;
   height: 60px;
+  position: relative;
+  border: 5px solid #2c3e50;
+}
+
+.buttons__item span {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: #fff;
+  font-weight: 700;
 }
 
 .buttons__item img {
