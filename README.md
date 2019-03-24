@@ -1,6 +1,6 @@
 # test-project
 
-> A Vue.js project
+> Dota 2 Invoker spell trainer
 
 ## Build Setup
 
