@@ -3,15 +3,6 @@
 import Vue from "vue";
 import App from "./App";
 
-Vue.config.productionTip = false;
-
-Vue.config.keyCodes = {
-  Q: 81,
-  W: 87,
-  E: 69,
-  R: 82
-};
-
 /* eslint-disable no-new */
 new Vue({
   el: "#app",

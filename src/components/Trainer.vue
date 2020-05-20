@@ -2,52 +2,45 @@
   <div class="trainer">
     <div class="casts" v-if="started">
       <div class="casts__item" v-for="cast in casts">
-        <img
-          :src="sphere.icon"
-          alt=""
-          v-for="sphere in spheres"
-          v-if="cast == sphere.key"
-        />
+        <img :src="sphere.icon" alt v-for="sphere in spheres" v-if="cast == sphere.key">
       </div>
     </div>
     <img
       class="invoker"
       src="https://avatanplus.com/files/resources/mid/5670093fe95a8151a5a421d4.png"
-    />
-    <div class="spells" v-show="">
+    >
+    <div class="spells" v-show>
       <div class="spells__item" v-for="spell in spells">
-        <img :src="spell.icon" alt="" />
+        <img :src="spell.icon" alt>
         <p v-text="spell.name"></p>
       </div>
     </div>
-    <div class="time"><span :style="{ width: time + '%' }"></span></div>
+    <div class="time">
+      <span :style="{ width: time + '%' }"></span>
+    </div>
     <div class="buttons">
       <div class="buttons__item" v-for="sphere in spheres">
-        <img :src="sphere.icon" /> <span v-text="sphere.button"></span>
+        <img :src="sphere.icon">
+        <span v-text="sphere.button"></span>
       </div>
       <div class="buttons__item">
-        <img :src="ready_spells[0].icon" alt="" v-if="ready_spells[0]" />
+        <img :src="ready_spells[0].icon" alt v-if="ready_spells[0]">
         <span>D</span>
       </div>
       <div class="buttons__item">
-        <img :src="ready_spells[1].icon" alt="" v-if="ready_spells[1]" />
+        <img :src="ready_spells[1].icon" alt v-if="ready_spells[1]">
         <span>F</span>
       </div>
 
       <div class="buttons__item">
-        <img
-          src="https://www.invokergame.com/images/spells/invoke.png"
-          alt=""
-        />
+        <img src="https://www.invokergame.com/images/spells/invoke.png" alt>
         <span>R</span>
       </div>
     </div>
     <div class="random_spell" v-if="started">
-      <img :src="random_spell.icon" alt="" v-if="random_spell" />
+      <img :src="random_spell.icon" alt v-if="random_spell">
     </div>
-    <button class="button-start" @click="startGame();" v-if="!started">
-      Старт (Нажмите ENTER)
-    </button>
+    <button class="button-start" @click="startGame();" v-if="!started">Старт (Нажмите ENTER)</button>
     <div
       class="point"
       v-if="point > 0 && !started"
@@ -127,7 +120,7 @@ export default {
       }
 
       var audio = new Audio(
-        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_gamepedia/c/c7/Invoke.mp3"
+        "https://gamepedia.cursecdn.com/dota2_gamepedia/c/c7/Invoke.mp3"
       ); // path to file
       audio.play();
     },
@@ -172,10 +165,8 @@ export default {
     return {
       time: 100,
       mistakeAudios: [
-        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/8/8c/Invo_failure_03_ru.mp3",
-        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/f/fd/Invo_failure_06_ru.mp3",
-        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/f/f2/Invo_failure_05_ru.mp3",
-        "https://d1u5p3l4wpay3k.cloudfront.net/dota2_ru_gamepedia/a/a2/Invo_failure_10_ru.mp3"
+        "https://gamepedia.cursecdn.com/dota2_gamepedia/7/7f/Vo_invoker_invo_anger_04.mp3",
+        "https://gamepedia.cursecdn.com/dota2_gamepedia/a/ae/Vo_invoker_invo_deny_11.mp3"
       ],
       started: false,
       point: 0,
