@@ -1,6 +1,5 @@
-# test-project
-
-> Dota 2 Invoker spell trainer
+#  Dota 2 Invoker spell trainer
+[Demo](https://65zrd.csb.app/)
 
 ## Build Setup
 
